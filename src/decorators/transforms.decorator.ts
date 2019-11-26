@@ -15,12 +15,12 @@ import { Transform } from 'class-transformer';
  * @constructor
  */
 export const Trim = () =>
-    Transform((value: string | string[]) => {
-        if (_.isArray(value)) {
-            return value.map(v => _.trim(v).replace(/\s\s+/g, ' '));
-        }
-        return _.trim(value).replace(/\s\s+/g, ' ');
-    });
+  Transform((value: string | string[]) => {
+    if (_.isArray(value)) {
+      return value.map(v => _.trim(v).replace(/\s\s+/g, ' '));
+    }
+    return _.trim(value).replace(/\s\s+/g, ' ');
+  });
 
 /**
  * @description convert string or number to integer
@@ -32,4 +32,4 @@ export const Trim = () =>
  * @constructor
  */
 export const ToInt = () =>
-    Transform(value => parseInt(value, 10), { toClassOnly: true });
+  Transform(value => parseInt(value, 10), { toClassOnly: true });

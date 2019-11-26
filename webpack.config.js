@@ -1,4 +1,6 @@
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const {
+    CleanWebpackPlugin
+} = require('clean-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
@@ -13,13 +15,11 @@ module.exports = {
         }),
     ],
     module: {
-        rules: [
-            {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/,
-            },
-        ],
+        rules: [{
+            test: /\.tsx?$/,
+            use: 'ts-loader',
+            exclude: /node_modules/,
+        }, ],
     },
     mode: 'development',
     resolve: {
@@ -29,7 +29,8 @@ module.exports = {
         new webpack.ProgressPlugin(),
         new CleanWebpackPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.WatchIgnorePlugin([/\.js$/, /\.d\.ts$/])],
+        new webpack.WatchIgnorePlugin([/\.js$/, /\.d\.ts$/])
+    ],
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'main.js',

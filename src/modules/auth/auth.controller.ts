@@ -1,20 +1,20 @@
 import {
-    Controller,
-    Post,
-    Body,
-    HttpCode,
-    HttpStatus,
-    Get,
-    UseInterceptors,
-    UseGuards,
-    UploadedFile,
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Get,
+  UseInterceptors,
+  UseGuards,
+  UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
-    ApiOkResponse,
-    ApiUseTags,
-    ApiBearerAuth,
-    ApiImplicitFile,
+  ApiOkResponse,
+  ApiUseTags,
+  ApiBearerAuth,
+  ApiImplicitFile,
 } from '@nestjs/swagger';
 
 import { AuthUser } from '../../decorators/auth-user.decorator';
@@ -32,50 +32,50 @@ import { UserRegisterDto } from './dto/UserRegisterDto';
 @Controller('auth')
 @ApiUseTags('auth')
 export class AuthController {
-    constructor(
-        public readonly userService: UserService,
-        public readonly authService: AuthService,
-    ) {}
+  constructor(
+    public readonly userService: UserService,
+    public readonly authService: AuthService,
+  ) { }
 
-    @Post('login')
-    @HttpCode(HttpStatus.OK)
-    @ApiOkResponse({
-        type: LoginPayloadDto,
-        description: 'User info with access token',
-    })
-    async userLogin(
-        @Body() userLoginDto: UserLoginDto,
-    ): Promise<LoginPayloadDto> {
-        const userEntity = await this.authService.validateUser(userLoginDto);
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: LoginPayloadDto,
+    description: 'User info with access token',
+  })
+  async userLogin(
+    @Body() userLoginDto: UserLoginDto,
+  ): Promise<LoginPayloadDto> {
+    const userEntity = await this.authService.validateUser(userLoginDto);
 
-        const token = await this.authService.createToken(userEntity);
-        return new LoginPayloadDto(userEntity.toDto(), token);
-    }
+    const token = await this.authService.createToken(userEntity);
+    return new LoginPayloadDto(userEntity.toDto(), token);
+  }
 
-    @Post('register')
-    @HttpCode(HttpStatus.OK)
-    @ApiOkResponse({ type: UserDto, description: 'Successfully Registered' })
-    @ApiImplicitFile({ name: 'avatar', required: true })
-    @UseInterceptors(FileInterceptor('avatar'))
-    async userRegister(
-        @Body() userRegisterDto: UserRegisterDto,
-        @UploadedFile() file: IFile,
-    ): Promise<UserDto> {
-        const createdUser = await this.userService.createUser(
-            userRegisterDto,
-            file,
-        );
+  @Post('register')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ type: UserDto, description: 'Successfully Registered' })
+  @ApiImplicitFile({ name: 'avatar', required: true })
+  @UseInterceptors(FileInterceptor('avatar'))
+  async userRegister(
+    @Body() userRegisterDto: UserRegisterDto,
+    @UploadedFile() file: IFile,
+  ): Promise<UserDto> {
+    const createdUser = await this.userService.createUser(
+      userRegisterDto,
+      file,
+    );
 
-        return createdUser.toDto();
-    }
+    return createdUser.toDto();
+  }
 
-    @Get('me')
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(AuthGuard)
-    @UseInterceptors(AuthUserInterceptor)
-    @ApiBearerAuth()
-    @ApiOkResponse({ type: UserDto, description: 'current user info' })
-    getCurrentUser(@AuthUser() user: UserEntity) {
-        return user.toDto();
-    }
+  @Get('me')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @UseInterceptors(AuthUserInterceptor)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: UserDto, description: 'current user info' })
+  getCurrentUser(@AuthUser() user: UserEntity) {
+    return user.toDto();
+  }
 }
